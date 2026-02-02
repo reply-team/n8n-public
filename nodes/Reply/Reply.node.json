@@ -1,0 +1,19 @@
+{
+	"node": "@replyio/n8n-nodes-reply.reply",
+	"nodeVersion": "1.0",
+	"categories": ["Sales & CRM", "Communication", "Marketing"],
+	"resources": {
+		"primaryDocumentation": [
+			{
+				"url": "https://docs.reply.io/"
+			}
+		],
+		"generic": [
+			{
+				"label": "Sales engagement automation with Reply.io",
+				"icon": "📧",
+				"url": "https://reply.io/blog/"
+			}
+		]
+	}
+}

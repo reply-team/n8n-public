@@ -1,0 +1,58 @@
+{
+	"name": "@replyio/n8n-nodes-reply-dev",
+	"version": "0.18.0",
+	"description": "n8n community node for Reply.io API integration",
+	"license": "MIT",
+	"homepage": "",
+	"keywords": [
+		"n8n-community-node-package"
+	],
+	"engines": {
+		"node": ">=23.0.0"
+	},
+	"author": {
+		"name": "Borys Boiko",
+		"email": "b.boiko@reply.io"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/reply-team/n8n-public.git"
+	},
+	"scripts": {
+		"build": "n8n-node build",
+		"build:watch": "tsc --watch",
+		"dev": "n8n-node dev",
+		"lint": "n8n-node lint",
+		"lint:fix": "n8n-node lint --fix",
+		"release": "n8n-node release",
+		"test": "jest",
+		"test:watch": "jest --watch"
+	},
+	"files": [
+		"dist"
+	],
+	"n8n": {
+		"n8nNodesApiVersion": 1,
+		"strict": true,
+		"credentials": [
+			"dist/credentials/ReplyApi.credentials.js"
+		],
+		"nodes": [
+			"dist/nodes/Reply/Reply.node.js",
+			"dist/nodes/Reply/ReplyTrigger.node.js"
+		]
+	},
+	"devDependencies": {
+		"@n8n/node-cli": "0.17.0",
+		"@types/jest": "^29.5.14",
+		"eslint": "9.32.0",
+		"jest": "^29.7.0",
+		"prettier": "3.6.2",
+		"release-it": "^19.0.4",
+		"ts-jest": "^29.2.5",
+		"typescript": "5.9.3"
+	},
+	"peerDependencies": {
+		"n8n-workflow": "2.2.1"
+	}
+}
