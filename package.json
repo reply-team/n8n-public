@@ -1,6 +1,6 @@
 {
 	"name": "@replyio/n8n-nodes-reply-dev",
-	"version": "0.18.0",
+	"version": "0.19.0",
 	"description": "n8n community node for Reply.io API integration",
 	"license": "MIT",
 	"homepage": "",
@@ -53,6 +53,6 @@
 		"typescript": "5.9.3"
 	},
 	"peerDependencies": {
-		"n8n-workflow": "2.2.1"
+		"n8n-workflow": "*"
 	}
 }

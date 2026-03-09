@@ -9,13 +9,8 @@ FROM n8nio/n8n:latest
 
 USER root
 
-COPY --from=build /app/package.json /tmp/reply-node/
-COPY --from=build /app/dist/ /tmp/reply-node/dist/
-
-WORKDIR /tmp/reply-node
-RUN npm pack && npm install -g *.tgz && rm -rf /tmp/reply-node
+COPY --from=build /app/package.json /usr/local/lib/node_modules/n8n/node_modules/@replyio/n8n-nodes-reply-dev/
+COPY --from=build /app/dist/ /usr/local/lib/node_modules/n8n/node_modules/@replyio/n8n-nodes-reply-dev/dist/
 
 USER node
 WORKDIR /home/node
-
-ENV N8N_CUSTOM_EXTENSIONS=/usr/local/lib/node_modules/@replyio/n8n-nodes-reply
