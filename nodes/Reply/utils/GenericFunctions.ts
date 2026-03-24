@@ -11,6 +11,7 @@ import type {
 import { NodeApiError, NodeOperationError } from 'n8n-workflow';
 
 import { publicUrls } from '../../../publicUrls';
+import { version as nodeVersion } from '../../../package.json';
 
 type ReplyApiContext =
 	| IExecuteFunctions
@@ -54,6 +55,7 @@ async function makeRequest<T = unknown>(
 		url: `${options.baseUrl}${options.endpoint}`,
 		headers: {
 			'Content-Type': 'application/json',
+			'x-n8n-node-version': `${nodeVersion}`,
 			...options.headers,
 		},
 		json: true,
