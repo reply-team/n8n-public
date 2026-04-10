@@ -1,4 +1,4 @@
 export const publicUrls = {
-	Reply2Api: 'https://api.dev.reply.io',
-	ReplyWebhookApi: 'https://api.dev.reply.io/api',
+	Reply2Api: 'https://api.reply.io',
+	ReplyWebhookApi: 'https://api.reply.io/api',
 };
