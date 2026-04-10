@@ -256,6 +256,40 @@ export async function resolveContactId(ctx: IExecuteFunctions, i: number): Promi
 	return contacts[0].id as number;
 }
 
+export function mapContactFieldsToV3(body: IDataObject): IDataObject {
+	const mapped = { ...body };
+	if ('linkedInProfile' in mapped) {
+		mapped.linkedInUrl = mapped.linkedInProfile;
+		delete mapped.linkedInProfile;
+	}
+	if ('timeZone' in mapped) {
+		mapped.timeZoneId = mapped.timeZone;
+		delete mapped.timeZone;
+	}
+	return mapped;
+}
+
+export function mapContactFieldsFromV3(body: IDataObject): IDataObject {
+	const mapped = { ...body };
+	if ('linkedInUrl' in mapped) {
+		mapped.linkedInProfile = mapped.linkedInUrl;
+		delete mapped.linkedInUrl;
+	}
+	if ('linkedInSalesNavigatorUrl' in mapped) {
+		mapped.linkedInSalesNavigator = mapped.linkedInSalesNavigatorUrl;
+		delete mapped.linkedInSalesNavigatorUrl;
+	}
+	if ('linkedInRecruiterUrl' in mapped) {
+		mapped.linkedInRecruiter = mapped.linkedInRecruiterUrl;
+		delete mapped.linkedInRecruiterUrl;
+	}
+	if ('timeZoneId' in mapped) {
+		mapped.timeZone = mapped.timeZoneId;
+		delete mapped.timeZoneId;
+	}
+	return mapped;
+}
+
 function parseReplyApiError(this: ReplyApiContext, error: unknown): NodeApiError {
 	const err = error as {
 		message?: string;

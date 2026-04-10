@@ -1,6 +1,6 @@
 # @replyio/n8n-nodes-reply
 
-This is an n8n community node for [Reply.io](https://reply.io) - a sales engagement platform that automates multichannel outreach across email, LinkedIn, calls, SMS, and WhatsApp.
+This is an n8n official community node for [Reply.io](https://reply.io) - a sales engagement platform that automates multichannel outreach across email, LinkedIn, calls, SMS, and WhatsApp.
 
 [n8n](https://n8n.io/) is a [fair-code licensed](https://docs.n8n.io/sustainable-use-license/) workflow automation platform.
 

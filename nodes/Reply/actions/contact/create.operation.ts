@@ -1,7 +1,7 @@
 import type { IExecuteFunctions, IDataObject, INodeExecutionData } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
 
-import { replyApiRequest } from '../../utils/GenericFunctions';
+import { replyApiRequest, mapContactFieldsToV3 } from '../../utils/GenericFunctions';
 import { validateEmail } from '../../utils/validation';
 
 export async function execute(this: IExecuteFunctions, i: number): Promise<INodeExecutionData[]> {
@@ -39,6 +39,6 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 	if (phone) body.phone = phone;
 	if (company) body.company = company;
 
-	const response = await replyApiRequest.call(this, 'POST', '/v3/contacts', body);
+	const response = await replyApiRequest.call(this, 'POST', '/v3/contacts', mapContactFieldsToV3(body));
 	return [{ json: response as IDataObject, pairedItem: i }];
 }

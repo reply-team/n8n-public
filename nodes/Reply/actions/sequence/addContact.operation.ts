@@ -1,7 +1,7 @@
 import type { IExecuteFunctions, IDataObject, INodeExecutionData } from 'n8n-workflow';
 import { NodeOperationError } from 'n8n-workflow';
 
-import { replyApiRequest, resolveSequenceId, lookupContactByEmailOrLinkedIn } from '../../utils/GenericFunctions';
+import { replyApiRequest, resolveSequenceId, lookupContactByEmailOrLinkedIn, mapContactFieldsToV3, mapContactFieldsFromV3 } from '../../utils/GenericFunctions';
 
 export async function execute(this: IExecuteFunctions, i: number): Promise<INodeExecutionData[]> {
 	const sequenceId = await resolveSequenceId.call(this, 'sequenceId', i);
@@ -16,13 +16,10 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 
 	const lookup = await lookupContactByEmailOrLinkedIn(this, i, email, linkedIn);
 
-	let body: IDataObject;
+	let contactId: number;
 
 	if (lookup.found) {
-		body = {
-			contactId: lookup.contactId,
-			forcePush,
-		};
+		contactId = lookup.contactId!;
 	} else {
 		if (!firstName) {
 			throw new NodeOperationError(
@@ -42,28 +39,36 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 		if (phone) contact.phone = phone;
 		if (company) contact.company = company;
 
-		body = {
-			contact,
-			forcePush,
-		};
+		const createResponse = (await replyApiRequest.call(
+			this,
+			'POST',
+			'/v3/contacts',
+			mapContactFieldsToV3(contact),
+		)) as IDataObject;
+
+		contactId = createResponse.id as number;
 	}
 
-	const response = await replyApiRequest.call(
+	await replyApiRequest.call(
 		this,
 		'POST',
-		`/v3/sequences/${sequenceId}/contacts`,
-		body,
+		`/v3/contacts/${contactId}/move-to-sequence`,
+		{
+			sequenceId,
+			removeFromExisting: forcePush,
+		},
 	);
+
+	// Refetch the full contact to get the complete model with updated sequence info
+	const fullContact = (await replyApiRequest.call(
+		this,
+		'GET',
+		`/v3/contacts/${contactId}`,
+	)) as IDataObject;
 
 	return [
 		{
-			json: response
-				? (response as IDataObject)
-				: {
-						success: true,
-						sequenceId,
-						message: 'Contact added to sequence',
-					},
+			json: mapContactFieldsFromV3(fullContact),
 			pairedItem: i,
 		},
 	];

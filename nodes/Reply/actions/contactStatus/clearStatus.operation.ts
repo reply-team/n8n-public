@@ -1,5 +1,4 @@
 import type { IExecuteFunctions, IDataObject, INodeExecutionData } from 'n8n-workflow';
-import { NodeApiError } from 'n8n-workflow';
 
 import { replyApiRequest, resolveContactId, resolveSequenceId } from '../../utils/GenericFunctions';
 
@@ -24,33 +23,23 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 		body.sequenceId = sequenceId;
 	}
 
-	try {
-		const response = await replyApiRequest.call(this, 'PATCH', '/v3/contacts/status/clear', body);
+	const response = await replyApiRequest.call(this, 'POST', '/v3/contacts/clear-status', body);
 
-		return [
-			{
-				json: response
-					? (response as IDataObject)
-					: {
-							success: true,
-							contactId,
-							...(sequenceId && { sequenceId }),
-							...(statuses.length > 0 ? { clearedStatuses: statuses } : { clearedAll: true }),
-							message:
-								statuses.length > 0
-									? `Cleared statuses: ${statuses.join(', ')}`
-									: 'Cleared all statuses',
-						},
-				pairedItem: i,
-			},
-		];
-	} catch (error) {
-		if (error instanceof NodeApiError) {
-			const httpCode = (error as NodeApiError & { httpCode?: string }).httpCode;
-			if (httpCode === '400') {
-				return [{ json: { affected: [] }, pairedItem: i }];
-			}
-		}
-		throw error;
-	}
+	return [
+		{
+			json: response
+				? (response as IDataObject)
+				: {
+						success: true,
+						contactId,
+						...(sequenceId && { sequenceId }),
+						...(statuses.length > 0 ? { clearedStatuses: statuses } : { clearedAll: true }),
+						message:
+							statuses.length > 0
+								? `Cleared statuses: ${statuses.join(', ')}`
+								: 'Cleared all statuses',
+					},
+			pairedItem: i,
+		},
+	];
 }

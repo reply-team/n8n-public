@@ -10,12 +10,13 @@ export async function execute(this: IExecuteFunctions, i: number): Promise<INode
 
 	const pagination = mapPagination({ limit, offset });
 	const qs: IDataObject = { top: pagination.top, skip: pagination.skip };
+	const body: IDataObject = { sequenceId };
 
 	const response = (await replyApiRequest.call(
 		this,
-		'GET',
-		`/v3/sequences/${sequenceId}/contacts`,
-		undefined,
+		'POST',
+		'/v3/contacts/filter',
+		body,
 		qs,
 	)) as IDataObject;
 
