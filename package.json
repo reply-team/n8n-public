@@ -1,6 +1,6 @@
 {
 	"name": "@replyio/n8n-nodes-reply",
-	"version": "0.22.0",
+	"version": "0.23.0",
 	"description": "n8n community node for Reply.io API integration",
 	"license": "MIT",
 	"homepage": "",
