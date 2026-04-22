@@ -3,6 +3,10 @@ name: Release
 on:
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+
 jobs:
   release:
     name: Build and Publish to npm
