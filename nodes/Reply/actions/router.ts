@@ -17,10 +17,10 @@ const resourceOperations: Record<string, OperationsMap> = {
 	sequence: sequenceOperations,
 };
 
-export async function router(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
-	const items = this.getInputData();
-	const returnData: INodeExecutionData[] = [];
-
+export async function dispatchOperation(
+	this: IExecuteFunctions,
+	i: number,
+): Promise<INodeExecutionData[]> {
 	const resource = this.getNodeParameter('resource', 0) as string;
 	const operation = this.getNodeParameter('operation', 0) as string;
 
@@ -37,21 +37,5 @@ export async function router(this: IExecuteFunctions): Promise<INodeExecutionDat
 		);
 	}
 
-	for (let i = 0; i < items.length; i++) {
-		try {
-			const results = await operationHandler.execute.call(this, i);
-			returnData.push(...results);
-		} catch (error) {
-			if (this.continueOnFail()) {
-				returnData.push({ json: { error: (error as Error).message }, pairedItem: i });
-			} else {
-				if ((error as NodeOperationError).context) {
-					throw error;
-				}
-				throw new NodeOperationError(this.getNode(), error as Error, { itemIndex: i });
-			}
-		}
-	}
-
-	return [returnData];
+	return operationHandler.execute.call(this, i);
 }

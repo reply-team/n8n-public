@@ -8,11 +8,11 @@ import type {
 	INodeType,
 	INodeTypeDescription,
 } from 'n8n-workflow';
-import { NodeConnectionTypes } from 'n8n-workflow';
+import { NodeConnectionTypes, NodeOperationError } from 'n8n-workflow';
 
 import { replyApiRequest } from './utils/GenericFunctions';
 
-import { router } from './actions/router';
+import { dispatchOperation } from './actions/router';
 import { description as contactDescription } from './actions/contact';
 import { description as contactStatusDescription } from './actions/contactStatus';
 import { description as sequenceDescription } from './actions/sequence';
@@ -99,6 +99,22 @@ export class Reply implements INodeType {
 	};
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
-		return router.call(this);
+		const items = this.getInputData();
+		const returnData: INodeExecutionData[] = [];
+
+		for (let i = 0; i < items.length; i++) {
+			try {
+				const results = await dispatchOperation.call(this, i);
+				returnData.push(...results);
+			} catch (error) {
+				if (this.continueOnFail()) {
+					returnData.push({ json: { error: (error as Error).message }, pairedItem: i });
+					continue;
+				}
+				throw new NodeOperationError(this.getNode(), error as Error, { itemIndex: i });
+			}
+		}
+
+		return [returnData];
 	}
 }

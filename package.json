@@ -1,9 +1,9 @@
 {
 	"name": "@replyio/n8n-nodes-reply",
-	"version": "0.25.0",
+	"version": "0.26.0",
 	"description": "n8n community node for Reply.io API integration",
 	"license": "MIT",
-	"homepage": "",
+	"homepage": "https://github.com/reply-team/n8n-public",
 	"keywords": [
 		"n8n-community-node-package"
 	],
@@ -43,7 +43,7 @@
 		]
 	},
 	"devDependencies": {
-		"@n8n/node-cli": "0.17.0",
+		"@n8n/node-cli": "^0.30.0",
 		"@types/jest": "^29.5.14",
 		"eslint": "9.32.0",
 		"jest": "^29.7.0",

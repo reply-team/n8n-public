@@ -1,10 +1,12 @@
 import type { INodeProperties } from 'n8n-workflow';
 
 import * as clearStatus from './clearStatus.operation';
+import * as getStatuses from './getStatuses.operation';
 import * as updateStatus from './updateStatus.operation';
 
 export const operations = {
 	clearStatus,
+	getStatuses,
 	updateStatus,
 };
 
@@ -78,6 +80,12 @@ export const description: INodeProperties[] = [
 				value: 'clearStatus',
 				description: 'Clear statuses from a contact',
 				action: 'Clear contact status',
+			},
+			{
+				name: 'Get Statuses',
+				value: 'getStatuses',
+				description: 'Get all current statuses for a contact',
+				action: 'Get contact statuses',
 			},
 			{
 				name: 'Update Status',
@@ -159,6 +167,7 @@ export const description: INodeProperties[] = [
 		displayOptions: {
 			show: {
 				resource: ['contactStatus'],
+				operation: ['updateStatus', 'clearStatus'],
 			},
 		},
 		options: [
@@ -167,7 +176,8 @@ export const description: INodeProperties[] = [
 				name: 'sequenceId',
 				type: 'resourceLocator',
 				default: { mode: 'list', value: '' },
-				description: 'The sequence where the status change applies. If not provided, applies globally.',
+				description:
+					'Restrict the change to a single sequence (Active/Paused/Finished/OutOfOffice/Replied/Bounced). If empty, the change applies across all sequences the contact is in. Ignored for OptedOut, Called, ToCall, and MeetingBooked, which are global per-contact flags.',
 				modes: [
 					{
 						displayName: 'From List',

@@ -227,7 +227,7 @@ export async function resolveContactId(ctx: IExecuteFunctions, i: number): Promi
 			) {
 				throwNotFound();
 			}
-			throw error;
+			throw new NodeApiError(ctx.getNode(), error as JsonObject);
 		}
 		return contactId;
 	}
