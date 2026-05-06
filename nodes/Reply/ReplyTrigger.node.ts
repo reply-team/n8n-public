@@ -316,6 +316,14 @@ export class ReplyTrigger implements INodeType {
 				default: false,
 				description: "Whether to include the contact's custom fields in the webhook payload",
 			},
+			{
+				displayName: 'Include Reply Body',
+				name: 'includeEmailText',
+				type: 'boolean',
+				default: false,
+				description:
+					'Whether to include the reply email body (HTML, falls back to plaintext) inline in the payload as email_text. Applies to email_replied, reply_categorized, and email_auto_reply events. When off, only a signed reply_message_url is delivered.',
+			},
 		],
 	};
 
@@ -367,6 +375,7 @@ export class ReplyTrigger implements INodeType {
 					'includeProspectCustomFields',
 					false,
 				) as boolean;
+				const includeEmailText = this.getNodeParameter('includeEmailText', false) as boolean;
 
 				let existingWebhooks: IDataObject[] = [];
 				try {
@@ -396,6 +405,7 @@ export class ReplyTrigger implements INodeType {
 									isDisabled: false,
 									payload: {
 										includeEmailUrl: true,
+										includeEmailText,
 										includeProspectCustomFields,
 									},
 								},
@@ -409,6 +419,7 @@ export class ReplyTrigger implements INodeType {
 							isDisabled: false,
 							payload: {
 								includeEmailUrl: true,
+								includeEmailText,
 								includeProspectCustomFields,
 							},
 						};
